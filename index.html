@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siman - Tienda por Departamentos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style id="app-style">
+        :root {
+            --siman-red: #e10a17;
+            --siman-dark: #333333;
+            --siman-light: #f5f5f5;
+            --siman-gray: #666666;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--siman-dark);
+            background-color: #ffffff;
+        }
+        
+        /* Header Styles */
+        .top-bar {
+            background-color: var(--siman-dark);
+            color: white;
+            font-size: 0.8rem;
+            padding: 6px 0;
+        }
+        
+        .siman-logo {
+            height: 40px;
+        }
+        
+        .main-navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-link {
+            color: var(--siman-dark);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .nav-link:hover {
+            color: var(--siman-red);
+        }
+        
+        .search-form {
+            position: relative;
+            width: 100%;
+        }
+        
+        .search-form input {
+            border-radius: 20px;
+            font-size: 0.875rem;
+            border: 1px solid #ddd;
+            padding-left: 40px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--siman-gray);
+        }
+        
+        .icon-btn {
+            color: var(--siman-dark);
+            font-size: 1.25rem;
+            margin-left: 15px;
+        }
+        
+        .icon-btn:hover {
+            color: var(--siman-red);
+        }
+        
+        /* Hero Banner */
+        .hero-banner {
+            position: relative;
+            overflow: hidden;
+            height: 450px;
+        }
+        
+        .hero-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            max-width: 400px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-text {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-siman {
+            background-color: var(--siman-red);
+            color: white;
+            border-radius: 25px;
+            padding: 8px 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: none;
+        }
+        
+        .btn-siman:hover {
+            background-color: #c00912;
+            color: white;
+        }
+        
+        /* Categories Section */
+        .categories-section {
+            padding: 3rem 0;
+        }
+        
+        .category-card {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s;
+            padding: 1rem;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .category-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .category-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--siman-dark);
+        }
+        
+        /* Featured Products */
+        .featured-section {
+            padding: 2rem 0 4rem;
+            background-color: var(--siman-light);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            position: relative;
+            color: var(--siman-dark);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--siman-red);
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background-color: #f9f9f9;
+            padding: 1rem;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--siman-red);
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .product-info {
+            padding: 1rem;
+        }
+        
+        .product-brand {
+            font-size: 0.8rem;
+            color: var(--siman-gray);
+            margin-bottom: 0.25rem;
+        }
+        
+        .product-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 40px;
+        }
+        
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--siman-red);
+            margin-bottom: 0.5rem;
+        }
+        
+        .old-price {
+            text-decoration: line-through;
+            color: var(--siman-gray);
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-left: 0.5rem;
+        }
+        
+        .product-rating {
+            color: #f8ce0b;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Banner Section */
+        .promotion-banner {
+            padding: 4rem 0;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: relative;
+            color: white;
+        }
+        
+        .promotion-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .promotion-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .promotion-title {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .promotion-text {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Brands Section */
+        .brands-section {
+            padding: 3rem 0;
+        }
+        
+        .brand-logo {
+            height: 60px;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        
+        .brand-logo:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+        
+        /* Newsletter */
+        .newsletter-section {
+            padding: 3rem 0;
+            background-color: var(--siman-dark);
+            color: white;
+        }
+        
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .newsletter-input {
+            border-radius: 30px;
+            padding: 12px 150px 12px 20px;
+            width: 100%;
+            border: none;
+        }
+        
+        .newsletter-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            border-radius: 25px;
+            background-color: var(--siman-red);
+            color: white;
+            border: none;
+            padding: 7px 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 4rem 0 0;
+            background-color: #f8f8f8;
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--siman-dark);
+        }
+        
+        .footer-link {
+            display: block;
+            color: var(--siman-gray);
+            margin-bottom: 0.8rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-link:hover {
+            color: var(--siman-red);
+        }
+        
+        .social-icons {
+            margin-top: 1rem;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--siman-dark);
+            color: white;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--siman-red);
+            transform: translateY(-3px);
+        }
+        
+        .payment-logos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        
+        .payment-icon {
+            width: 40px;
+            height: 25px;
+            object-fit: contain;
+        }
+        
+        .copyright-bar {
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            background-color: var(--siman-dark);
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .hero-banner {
+                height: 350px;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-text {
+                font-size: 1rem;
+            }
+            
+            .footer {
+                padding: 3rem 0 0;
+            }
+            
+            .footer-col {
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .hero-banner {
+                height: 280px;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem;
+            }
+            
+            .hero-content {
+                left: 5%;
+                max-width: 90%;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .promotion-title {
+                font-size: 1.8rem;
+            }
+            
+            .newsletter-input {
+                padding: 12px 20px;
+            }
+            
+            .newsletter-btn {
+                position: static;
+                width: 100%;
+                margin-top: 10px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <section class="top-bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <small>¡Envío gratis en compras mayores a $50!</small>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <small>Servicio al cliente: +503 2298-3777</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <nav class="navbar navbar-expand-lg main-navbar sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="https://siman.vtexassets.com/arquivos/logo-footer.png" alt="Siman" class="siman-logo">
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSiman" aria-controls="navbarSiman" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSiman">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="departmentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Departamentos
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="departmentDropdown">
+                                <li><a class="dropdown-item" href="javascript:void(0)">Mujer</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Hombre</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Niños</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Hogar</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Electrónicos</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Belleza</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="belleza.html">Belleza</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="zapatos.html">
+                            Zapatos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="celular.html">Celulares</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="d-flex align-items-center">
+                        <form class="search-form me-3">
+                            <i class="fas fa-search search-icon"></i>
+                            <input class="form-control" type="search" placeholder="¿Qué estás buscando?" aria-label="Buscar">
+                        </form>
+                        
+                        <a href="javascript:void(0)" class="icon-btn">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="icon-btn">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="icon-btn position-relative">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                0
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero-banner">
+            <img src="https://cdn.pixabay.com/photo/2016/03/02/20/13/shopping-1232944_1280.jpg" alt="Promoción Siman">
+            <div class="hero-content">
+                <h1 class="hero-title">Nuevas Colecciones de Verano</h1>
+                <p class="hero-text">Descubre las últimas tendencias con hasta 40% de descuento en artículos seleccionados.</p>
+                <a href="javascript:void(0)" class="btn btn-siman">Comprar ahora</a>
+            </div>
+        </section>
+        
+        <section class="categories-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="category-card">
+                            <img src="https://cdn.pixabay.com/photo/2017/08/01/11/48/woman-2564660_1280.jpg" alt="Moda Mujer" class="category-img">
+                            <h3 class="category-title">Mujer</h3>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="category-card">
+                            <img src="https://cdn.pixabay.com/photo/2016/11/29/01/34/man-1866574_1280.jpg" alt="Moda Hombre" class="category-img">
+                            <h3 class="category-title">Hombre</h3>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="category-card">
+                            <img src="https://cdn.pixabay.com/photo/2018/01/15/07/52/portrait-3083402_1280.jpg" alt="Moda Niños" class="category-img">
+                            <h3 class="category-title">Niños</h3>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="category-card">
+                            <img src="https://cdn.pixabay.com/photo/2017/03/19/01/43/living-room-2155376_1280.jpg" alt="Hogar" class="category-img">
+                            <h3 class="category-title">Hogar</h3>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="category-card">
+                            <img src="https://cdn.pixabay.com/photo/2015/05/31/10/55/man-791049_1280.jpg" alt="Electrónicos" class="category-img">
+                            <h3 class="category-title">Electrónicos</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="featured-section">
+            <div class="container">
+                <h2 class="section-title">Productos Destacados</h2>
+                
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="product-card">
+                            <span class="product-badge">-20%</span>
+                            <img src="https://cdn.pixabay.com/photo/2016/12/06/09/31/blank-1886008_1280.png" class="product-img" alt="Camisa">
+                            <div class="product-info">
+                                <div class="product-brand">Tommy Hilfiger</div>
+                                <h3 class="product-name">Camisa Casual de Algodón para Hombre</h3>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <div class="product-price">
+                                    $39.99 <span class="old-price">$49.99</span>
+                                </div>
+                                <a href="javascript:void(0)" class="btn btn-sm btn-siman w-100">Agregar al carrito</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="product-card">
+                            <span class="product-badge">Nuevo</span>
+                            <img src="https://th.bing.com/th/id/OIP.7DjPWpam65Yid0QeQ6k6AQHaEs?cb=iwp1&rs=1&pid=ImgDetMain" class="product-img" alt="Smartphone">
+                            <div class="product-info">
+                                <div class="product-brand">Samsung</div>
+                                <h3 class="product-name">Galaxy S21 128GB Desbloqueado</h3>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="product-price">
+                                    $799.99
+                                </div>
+                                <a href="javascript:void(0)" class="btn btn-sm btn-siman w-100">Agregar al carrito</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="product-card">
+                            <span class="product-badge">-15%</span>
+                            <img src="https://cdn.pixabay.com/photo/2016/11/19/18/06/feet-1840619_1280.jpg" class="product-img" alt="Zapatos">
+                            <div class="product-info">
+                                <div class="product-brand">Adidas</div>
+                                <h3 class="product-name">Zapatillas Running Ultraboost 21</h3>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <div class="product-price">
+                                    $127.49 <span class="old-price">$149.99</span>
+                                </div>
+                                <a href="javascript:void(0)" class="btn btn-sm btn-siman w-100">Agregar al carrito</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3">
+                        <div class="product-card">
+                            <img src="https://cdn.shopify.com/s/files/1/0259/7733/products/chanel_coco_mademoiselle_edp_1024x1024.jpg?v=1446605823" class="product-img" alt="Perfume">
+                            <div class="product-info">
+                                <div class="product-brand">Chanel</div>
+                                <h3 class="product-name">Perfume Coco Mademoiselle 100ml</h3>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <div class="product-price">
+                                    $120.00
+                                </div>
+                                <a href="javascript:void(0)" class="btn btn-sm btn-siman w-100">Agregar al carrito</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="javascript:void(0)" class="btn btn-outline-dark">Ver más productos</a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="promotion-banner" style="background-image: url('https://cdn.pixabay.com/photo/2017/12/08/11/53/black-friday-3005571_1280.jpg');">
+            <div class="container">
+                <div class="promotion-content">
+                    <h2 class="promotion-title">Ofertas Especiales</h2>
+                    <p class="promotion-text">Descubre nuestras increíbles ofertas en miles de productos. ¡Solo por tiempo limitado!</p>
+                    <a href="javascript:void(0)" class="btn btn-siman">Ver Ofertas</a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="brands-section">
+            <div class="container">
+                <h2 class="section-title">Nuestras Marcas</h2>
+                
+                <div class="row align-items-center">
+                    <div class="col-4 col-md-2 text-center mb-4">
+                        <img src="https://cdn.pixabay.com/photo/2015/05/26/09/37/paypal-784404_1280.png" alt="PayPal" class="brand-logo">
+                    </div>
+                    <div class="col-4 col-md-2 text-center mb-4">
+                        <img src="https://cdn.pixabay.com/photo/2015/09/09/20/33/adidas-933065_1280.png" alt="Adidas" class="brand-logo">
+                    </div>
+                    <div class="col-4 col-md-2 text-center mb-4">
+                        <img src="https://cdn.pixabay.com/photo/2015/04/13/17/45/icon-720944_1280.png" alt="Apple" class="brand-logo">
+                    </div>
+                    <div class="col-4 col-md-2 text-center mb-4">
+                        <img src="https://cdn.pixabay.com/photo/2015/09/09/20/32/nike-933073_1280.png" alt="Nike" class="brand-logo">
+                    </div>
+                    <div class="col-4 col-md-2 text-center mb-4">
+                        <img src="https://cdn.pixabay.com/photo/2013/01/29/22/06/samsung-76846_1280.png" alt="Samsung" class="brand-logo">
+                    </div>
+                    <div class="col-4 col-md-2 text-center mb-4">
+                        <img src="https://cdn.pixabay.com/photo/2013/02/12/09/07/microsoft-80658_1280.png" alt="Microsoft" class="brand-logo">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="newsletter-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="section-title text-white">Suscríbete a nuestro boletín</h2>
+                        <p class="mb-4">Recibe nuestras últimas ofertas y novedades directamente en tu correo.</p>
+                        
+                        <form class="newsletter-form">
+                            <input type="email" class="newsletter-input" placeholder="Tu correo electrónico" required>
+                            <button type="submit" class="newsletter-btn">Suscribirme</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 footer-col">
+                    <h4 class="footer-title">Acerca de Siman</h4>
+                    <p>Siman es la tienda por departamentos líder en Centroamérica, ofreciendo productos de calidad internacional desde 1921.</p>
+                    <div class="social-icons">
+                        <a href="javascript:void(0)" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="javascript:void(0)" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="javascript:void(0)" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="javascript:void(0)" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 footer-col">
+                    <h4 class="footer-title">Ayuda</h4>
+                    <a href="javascript:void(0)" class="footer-link">Preguntas frecuentes</a>
+                    <a href="javascript:void(0)" class="footer-link">Términos y condiciones</a>
+                    <a href="javascript:void(0)" class="footer-link">Política de privacidad</a>
+                    <a href="javascript:void(0)" class="footer-link">Cambios y devoluciones</a>
+                    <a href="javascript:void(0)" class="footer-link">Contacto</a>
+                </div>
+                
+                <div class="col-md-3 footer-col">
+                    <h4 class="footer-title">Mi cuenta</h4>
+                    <a href="javascript:void(0)" class="footer-link">Iniciar sesión</a>
+                    <a href="javascript:void(0)" class="footer-link">Registrarse</a>
+                    <a href="javascript:void(0)" class="footer-link">Historial de pedidos</a>
+                    <a href="javascript:void(0)" class="footer-link">Lista de deseos</a>
+                    <a href="javascript:void(0)" class="footer-link">Tarjeta Siman</a>
+                </div>
+                
+                <div class="col-md-3 footer-col">
+                    <h4 class="footer-title">Información</h4>
+                    <a href="javascript:void(0)" class="footer-link">Nuestras tiendas</a>
+                    <a href="javascript:void(0)" class="footer-link">Trabaja con nosotros</a>
+                    <a href="javascript:void(0)" class="footer-link">Envíos</a>
+                    <a href="javascript:void(0)" class="footer-link">Formas de pago</a>
+                    
+                    <div class="payment-logos">
+                        <img src="https://cdn.pixabay.com/photo/2015/05/26/09/37/paypal-784404_1280.png" alt="PayPal" class="payment-icon">
+                        <img src="https://cdn.pixabay.com/photo/2013/10/01/10/29/ebay-189064_1280.png" alt="Credit Card" class="payment-icon">
+                        <img src="https://cdn.pixabay.com/photo/2015/08/29/22/01/visa-913914_1280.png" alt="Visa" class="payment-icon">
+                        <img src="https://cdn.pixabay.com/photo/2015/08/29/22/01/mastercard-913913_1280.png" alt="MasterCard" class="payment-icon">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright-bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-0">&copy; 2025 Almacenes Siman. Todos los derechos reservados.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-0">Diseñado y desarrollado con <i class="fas fa-heart text-danger"></i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script id="app-script">
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+        
+        // Simple promo countdown timer (for prototype)
+        document.addEventListener('DOMContentLoaded', function() {
+            // This would be replaced with actual API data in the production version
+            console.log("Siman webpage loaded successfully");
+        });
+    </script>
+</body>
+</html>

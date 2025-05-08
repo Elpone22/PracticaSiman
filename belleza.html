@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIMAN | Belleza e Higiene</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style id="app-style">
+    :root {
+      --primary-color: #e83e8c;
+      --secondary-color: #6610f2;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --accent-color: #20c997;
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    
+    h1, h2, h3, h4, .logo-font {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+    
+    .hero-carousel .carousel-item {
+      height: 60vh;
+      min-height: 300px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    
+    .hero-carousel .carousel-caption {
+      background-color: rgba(0,0,0,0.6);
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .search-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 0;
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .product-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .product-card img {
+      height: 220px;
+      object-fit: cover;
+      width: 100%;
+    }
+    
+    .product-card .card-body {
+      padding: 1.5rem;
+    }
+    
+    .category-filters .btn {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 20px;
+      padding: 0.5rem 1.2rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    
+    .category-filters .btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .ai-recommendations {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 3rem 0;
+      margin: 3rem 0;
+      border-radius: 10px;
+    }
+    
+    .star-rating .fa-star.checked {
+      color: gold;
+    }
+    
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .review-form label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    
+    .loading-spinner {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2000;
+    }
+    
+    .price {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+    
+    .badge-new {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    
+    .badge-sale {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    
+    .header-top {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .hero-carousel .carousel-item {
+        height: 40vh;
+      }
+      
+      .hero-carousel .carousel-caption {
+        padding: 1rem;
+        max-width: 90%;
+      }
+      
+      .product-card img {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Back to Top Button -->
+  <button class="btn btn-primary rounded-circle back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  
+  <!-- Header Top -->
+  <section class="header-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <small>
+            <i class="fas fa-truck me-1"></i> Envío gratis en compras mayores a $50
+          </small>
+        </div>
+        <div class="col-md-6 text-end">
+          <small>
+            <i class="fas fa-phone-alt me-1"></i> Servicio al cliente: 800-123-4567
+          </small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Header Section -->
+  <section class="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="https://siman.vtexassets.com/arquivos/logo-footer.png" alt="Siman" class="siman-logo" style="width: 150px;">
+          </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Categorías
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="javascript:void(0)">Maquillaje</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0)">Cuidado Facial</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0)">Fragancias</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0)">Cuidado Personal</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0)">Higiene</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="belleza.html">Belleza</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="zapatos.html">
+                Zapatos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="celular.html">Celulares</a>
+            </li>
+          </ul>
+          <div class="d-flex ms-3">
+            <a href="javascript:void(0)" class="btn btn-outline-dark me-2">
+              <i class="fas fa-user"></i>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-outline-dark me-2">
+              <i class="fas fa-heart"></i>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-outline-dark position-relative">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                0
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  <!-- Hero Carousel Section -->
+  <section class="hero-carousel">
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active" style="background-image: url('https://cdn.pixabay.com/photo/2016/11/19/11/33/makeup-1838985_1280.jpg');">
+          <div class="carousel-caption d-none d-md-block" data-aos="fade-up">
+            <h2>Descubre los Nuevos Productos de Belleza</h2>
+            <p>Las últimas tendencias en maquillaje y cuidado personal</p>
+            <a href="javascript:void(0)" class="btn btn-primary btn-lg mt-3">Ver Productos</a>
+          </div>
+        </div>
+        <div class="carousel-item" style="background-image: url('https://cdn.pixabay.com/photo/2017/09/07/19/43/soap-2726387_1280.jpg');">
+          <div class="carousel-caption d-none d-md-block" data-aos="fade-up">
+            <h2>Productos de Cuidado Personal Premium</h2>
+            <p>Cuida tu piel con nuestros productos de alta calidad</p>
+            <a href="javascript:void(0)" class="btn btn-primary btn-lg mt-3">Explorar</a>
+          </div>
+        </div>
+        <div class="carousel-item" style="background-image: url('https://cdn.pixabay.com/photo/2018/02/23/03/24/beauty-3175122_1280.jpg');">
+          <div class="carousel-caption d-none d-md-block" data-aos="fade-up">
+            <h2>Ofertas Especiales</h2>
+            <p>Hasta 40% de descuento en productos seleccionados</p>
+            <a href="javascript:void(0)" class="btn btn-primary btn-lg mt-3">Ver Ofertas</a>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Search and Filter Section -->
+  <section class="search-bar">
+    <div class="container">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar productos..." aria-label="Buscar productos">
+            <button class="btn btn-primary" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="category-filters d-flex flex-wrap justify-content-md-end">
+            <button class="btn btn-outline-primary active">Todos</button>
+            <button class="btn btn-outline-primary">Maquillaje</button>
+            <button class="btn btn-outline-primary">Skincare</button>
+            <button class="btn btn-outline-primary">Higiene</button>
+            <button class="btn btn-outline-primary">Fragancias</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Products Section -->
+  <section class="main-products py-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-center mb-4" data-aos="fade-up">Productos Destacados</h2>
+          <p class="text-center mb-5" data-aos="fade-up">Descubre nuestra selección de productos de belleza e higiene personal</p>
+        </div>
+      </div>
+      
+      <div class="row g-4">
+        <!-- Product 1 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://m.media-amazon.com/images/I/71C6yykSYsL._AC_SL1500_.jpg" alt="Producto 1" class="card-img-top">
+              <span class="badge-new">Nuevo</span>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Crema Hidratante Facial</h5>
+              <p class="card-text">Hidratación intensa para todo tipo de piel con fórmula renovada.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star"></i>
+                <small class="ms-2">(34)</small>
+              </div>
+              <div class="price mb-3">$35.99</div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 2 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://th.bing.com/th/id/OIP.7VWWl_sZs6ReQMrt13Yk7gHaHa?w=194&h=194&c=7&r=0&o=7&cb=iwp1&dpr=1.5&pid=1.7&rm=3" alt="Producto 2" class="card-img-top">
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Set de Maquillaje Completo</h5>
+              <p class="card-text">Incluye sombras, labiales, base y brochas profesionales.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <small class="ms-2">(56)</small>
+              </div>
+              <div class="price mb-3">$89.99</div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://th.bing.com/th/id/OIP.Clc58k6zbWEPhr6q7bjSegHaG2?w=188&h=180&c=7&r=0&o=7&cb=iwp1&dpr=1.5&pid=1.7&rm=3" alt="Producto 3" class="card-img-top">
+              <span class="badge-sale">-25%</span>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Sales de Baño Aromáticas</h5>
+              <p class="card-text">Relajantes sales de baño con esencias naturales.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <small class="ms-2">(18)</small>
+              </div>
+              <div class="price mb-3">
+                <span class="text-decoration-line-through text-muted me-2">$24.99</span>
+                $18.75
+              </div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 4 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://th.bing.com/th/id/OIP.wC7CdeOzMvpAJYYWiwvjOAHaE8?w=254&h=180&c=7&r=0&o=7&cb=iwp1&dpr=1.5&pid=1.7&rm=3" alt="Producto 4" class="card-img-top">
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Jabones Artesanales</h5>
+              <p class="card-text">Jabones orgánicos hechos a mano con ingredientes naturales.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <small class="ms-2">(42)</small>
+              </div>
+              <div class="price mb-3">$12.99</div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 5 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://th.bing.com/th/id/OIP.EjOzUQ2FVWigSoYjItNYMgHaE7?cb=iwp1&rs=1&pid=ImgDetMain" alt="Producto 5" class="card-img-top">
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Perfume de Lujo</h5>
+              <p class="card-text">Fragancia exclusiva con notas de bergamota y sándalo.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star"></i>
+                <small class="ms-2">(27)</small>
+              </div>
+              <div class="price mb-3">$129.99</div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 6 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://cdn.pixabay.com/photo/2015/05/25/14/27/summer-783347_1280.jpg" alt="Producto 6" class="card-img-top">
+              <span class="badge-sale">-15%</span>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Protector Solar SPF 50</h5>
+              <p class="card-text">Protección avanzada contra rayos UVA/UVB, resistente al agua.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star"></i>
+                <small class="ms-2">(31)</small>
+              </div>
+              <div class="price mb-3">
+                <span class="text-decoration-line-through text-muted me-2">$22.99</span>
+                $19.54
+              </div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 7 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://th.bing.com/th/id/OIP.s43hGlicBMOIm_KD3OIs-gHaHa?cb=iwp1&rs=1&pid=ImgDetMain" alt="Producto 7" class="card-img-top">
+              <span class="badge-new">Nuevo</span>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Kit de Brochas Profesionales</h5>
+              <p class="card-text">Set de 12 brochas para maquillaje profesional de alta calidad.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <small class="ms-2">(64)</small>
+              </div>
+              <div class="price mb-3">$45.99</div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 8 -->
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+          <div class="product-card">
+            <div class="position-relative">
+              <img src="https://th.bing.com/th/id/OIP.2QWUwhUmdEg-MH7H0qdWKQHaHa?cb=iwp1&rs=1&pid=ImgDetMain" alt="Producto 8" class="card-img-top">
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Labial de Larga Duración</h5>
+              <p class="card-text">Labial mate de alta pigmentación y durabilidad durante todo el día.</p>
+              <div class="star-rating mb-2">
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star checked"></i>
+                <i class="fas fa-star"></i>
+                <small class="ms-2">(48)</small>
+              </div>
+              <div class="price mb-3">$16.99</div>
+              <div class="mt-auto d-flex">
+                <button class="btn btn-primary flex-grow-1">Agregar al Carrito</button>
+                <button class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  <i class="fas fa-comment"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <button class="btn btn-outline-primary btn-lg" id="loadMoreBtn">
+            Cargar Más Productos
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Recommendations Section -->
+  <section class="ai-recommendations">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center mb-4">
+          <h2 data-aos="fade-up">Recomendaciones Personalizadas</h2>
+          <p data-aos="fade-up">Basado en tus preferencias y compras anteriores</p>
+        </div>
+      </div>
+      
+      <div class="row g-4" id="aiRecommendationsContainer">
+        <!-- AI recommendations will be loaded here -->
+        <div class="col-12 text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">Cargando recomendaciones personalizadas...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Customer Reviews Section -->
+  <section class="customer-reviews py-5 bg-light">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <h2 data-aos="fade-up">Opiniones de Clientes</h2>
+          <p data-aos="fade-up">Lo que dicen nuestros clientes sobre nosotros</p>
+        </div>
+      </div>
+      
+      <div class="row" id="reviewsContainer">
+        <!-- Reviews will be loaded here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter py-5" style="background-color: var(--primary-color);">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 text-center text-white">
+          <h3 data-aos="fade-up">¡Suscríbete a nuestro boletín!</h3>
+          <p data-aos="fade-up">Recibe ofertas exclusivas y descuentos especiales</p>
+          <div class="input-group mb-3" data-aos="fade-up">
+            <input type="email" class="form-control" placeholder="Tu correo electrónico" aria-label="Tu correo electrónico">
+            <button class="btn btn-dark" type="button">Suscribirse</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h4 class="logo-font">SIMAN</h4>
+          <p>Tu destino preferido para productos de belleza e higiene personal de alta calidad.</p>
+          <div class="social-icons">
+            <a href="javascript:void(0)" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+            <a href="javascript:void(0)" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+            <a href="javascript:void(0)" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+            <a href="javascript:void(0)" class="text-white"><i class="fab fa-pinterest"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-md-2">
+          <h5>Categorías</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">Maquillaje</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">Skincare</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">Fragancias</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">Higiene</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0">Accesorios</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-md-2">
+          <h5>Información</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">Sobre Nosotros</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">Contacto</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">FAQ</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0 mb-2">Blog</a></li>
+            <li class="nav-item"><a href="javascript:void(0)" class="nav-link text-white p-0">Tiendas</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-md-4">
+          <h5>Contáctanos</h5>
+          <p><i class="fas fa-map-marker-alt me-2"></i> 123 Calle Principal, San Salvador, El Salvador</p>
+          <p><i class="fas fa-phone-alt me-2"></i> 800-123-4567</p>
+          <p><i class="fas fa-envelope me-2"></i> info@siman.com</p>
+          <div class="mt-3">
+            <img src="https://cdn.pixabay.com/photo/2021/02/01/12/19/credit-cards-5971624_1280.png" alt="Métodos de pago" style="max-height: 30px;">
+          </div>
+        </div>
+      </div>
+      
+      <hr class="my-4">
+      
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; 2025 SIMAN. Todos los derechos reservados.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="javascript:void(0)" class="text-white me-3">Política de Privacidad</a>
+          <a href="javascript:void(0)" class="text-white">Términos y Condiciones</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Review Modal -->
+  <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reviewModalLabel">Escribir una reseña</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="review-form">
+            <div class="mb-3">
+              <label for="reviewName" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="reviewName" required>
+            </div>
+            <div class="mb-3">
+              <label for="reviewEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="reviewEmail" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Calificación</label>
+              <div class="star-rating-input">
+                <i class="far fa-star" data-rating="1"></i>
+                <i class="far fa-star" data-rating="2"></i>
+                <i class="far fa-star" data-rating="3"></i>
+                <i class="far fa-star" data-rating="4"></i>
+                <i class="far fa-star" data-rating="5"></i>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="reviewText" class="form-label">Tu reseña</label>
+              <textarea class="form-control" id="reviewText" rows="3" required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="submitReview">Publicar reseña</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- AOS Animation Library -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script id="app-script">
+    // Initialize AOS animation library
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+    
+    // Back to top button functionality
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Star rating system in review modal
+    const starRatingInput = document.querySelectorAll('.star-rating-input .fa-star');
+    let currentRating = 0;
+    
+    starRatingInput.forEach(star => {
+      star.addEventListener('click', function() {
+        const rating = parseInt(this.getAttribute('data-rating'));
+        currentRating = rating;
+        
+        // Reset all stars
+        starRatingInput.forEach(s => s.className = 'far fa-star');
+        
+        // Fill stars up to the selected rating
+        starRatingInput.forEach(s => {
+          const sRating = parseInt(s.getAttribute('data-rating'));
+          if (sRating <= rating) {
+            s.className = 'fas fa-star checked';
+          }
+        });
+      });
+      
+      star.addEventListener('mouseover', function() {
+        const rating = parseInt(this.getAttribute('data-rating'));
+        
+        // Reset all stars
+        starRatingInput.forEach(s => {
+          const sRating = parseInt(s.getAttribute('data-rating'));
+          s.className = sRating <= rating ? 'fas fa-star checked' : 'far fa-star';
+        });
+      });
+      
+      star.addEventListener('mouseout', function() {
+        // Reset to current selection
+        starRatingInput.forEach(s => {
+          const sRating = parseInt(s.getAttribute('data-rating'));
+          s.className = sRating <= currentRating ? 'fas fa-star checked' : 'far fa-star';
+        });
+      });
+    });
+    
+    // Submit review button
+    document.getElementById('submitReview').addEventListener('click', function() {
+      const reviewForm = document.querySelector('.review-form');
+      const name = document.getElementById('reviewName').value;
+      const email = document.getElementById('reviewEmail').value;
+      const reviewText = document.getElementById('reviewText').value;
+      
+      if (name && email && reviewText && currentRating > 0) {
+        // Show loading spinner
+        document.querySelector('.loading-spinner').style.display = 'block';
+        
+        // Simulate API call (will be replaced with real API later)
+        setTimeout(() => {
+          // Hide loading spinner
+          document.querySelector('.loading-spinner').style.display = 'none';
+          
+          // Close modal
+          const modal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
+          modal.hide();
+          
+          // Reset form
+          reviewForm.reset();
+          currentRating = 0;
+          starRatingInput.forEach(s => s.className = 'far fa-star');
+          
+          // Show success message
+          alert('¡Gracias por tu reseña! Ha sido enviada correctamente.');
+        }, 1500);
+      } else {
+        alert('Por favor completa todos los campos y selecciona una calificación.');
+      }
+    });
+    
+    // Load reviews (simulated)
+    function loadReviews() {
+      const reviewsContainer = document.getElementById('reviewsContainer');
+      
+      // Simulate loading state
+      reviewsContainer.innerHTML = `
+        <div class="col-12 text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      `;
+      
+      // Simulated API call to get reviews
+      setTimeout(() => {
+        // Sample review data (will be replaced with real API data later)
+        const reviews = [
+          {
+            name: 'María Rodríguez',
+            rating: 5,
+            date: '15/04/2025',
+            comment: 'Excelentes productos de belleza. Me encantó la crema hidratante, dejó mi piel super suave y con una sensación de frescura todo el día.'
+          },
+          {
+            name: 'Carlos Méndez',
+            rating: 4,
+            date: '02/04/2025',
+            comment: 'Compré un kit de cuidado facial para mi esposa y quedó encantada. La entrega fue rápida y el empaque muy bonito.'
+          },
+          {
+            name: 'Laura Fuentes',
+            rating: 5,
+            date: '27/03/2025',
+            comment: 'Los productos de maquillaje tienen una calidad increíble. Los tonos son exactamente como se ven en la página web. Definitivamente volveré a comprar.'
+          }
+        ];
+        
+        let reviewsHTML = '';
+        
+        reviews.forEach(review => {
+          let stars = '';
+          for (let i = 1; i <= 5; i++) {
+            if (i <= review.rating) {
+              stars += '<i class="fas fa-star checked"></i>';
+            } else {
+              stars += '<i class="fas fa-star"></i>';
+            }
+          }
+          
+          reviewsHTML += `
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">${review.name}</h5>
+                    <small class="text-muted">${review.date}</small>
+                  </div>
+                  <div class="star-rating mb-3">
+                    ${stars}
+                  </div>
+                  <p class="card-text">${review.comment}</p>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        reviewsContainer.innerHTML = reviewsHTML;
+        
+        // Re-initialize AOS for dynamically added elements
+        AOS.refresh();
+      }, 1500);
+    }
+    
+    // Load AI recommendations (simulated)
+    function loadAIRecommendations() {
+      const aiContainer = document.getElementById('aiRecommendationsContainer');
+      
+      // Simulated API call to get AI recommendations
+      setTimeout(() => {
+        // Sample AI recommendations (will be replaced with real API data later)
+        const recommendations = [
+          {
+            id: 1,
+            name: 'Serum Facial Anti-edad',
+            image: 'https://assets.unileversolutions.com/v1/129507382.png',
+            price: 54.99,
+            rating: 4.8,
+            reviews: 123
+          },
+          {
+            id: 2,
+            name: 'Mascarilla Facial Hidratante',
+            image: 'https://th.bing.com/th/id/OIP.d1oUsAcataytrIJQOxATZgHaE6?w=270&h=180&c=7&r=0&o=7&cb=iwp1&dpr=1.5&pid=1.7&rm=3',
+            price: 12.99,
+            rating: 4.5,
+            reviews: 87
+          },
+          {
+            id: 3,
+            name: 'Aceite Esencial de Lavanda',
+            image: 'https://ecocosas.com/wp-content/uploads/2019/03/aceite-esencial-de-lavanda-propiedades.jpg',
+            price: 18.50,
+            rating: 4.9,
+            reviews: 145
+          },
+          {
+            id: 4,
+            name: 'Contorno de Ojos Antiarrugas',
+            image: 'https://th.bing.com/th/id/OIP.4dHHUN0hz0ug_MpnxR9jVQHaFj?cb=iwp1&rs=1&pid=ImgDetMain',
+            price: 29.99,
+            rating: 4.7,
+            reviews: 94
+          }
+        ];
+        
+        let recommendationsHTML = '';
+        
+        recommendations.forEach(product => {
+          recommendationsHTML += `
+            <div class="col-md-6 col-lg-3" data-aos="fade-up">
+              <div class="product-card">
+                <img src="${product.image}" alt="${product.name}" class="card-img-top">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">${product.name}</h5>
+                  <div class="star-rating mb-2">
+                    <i class="fas fa-star checked"></i>
+                    <i class="fas fa-star checked"></i>
+                    <i class="fas fa-star checked"></i>
+                    <i class="fas fa-star checked"></i>
+                    <i class="fas fa-star ${product.rating >= 4.5 ? 'checked' : ''}"></i>
+                    <small class="ms-2">(${product.reviews})</small>
+                  </div>
+                  <div class="price mb-3">$${product.price}</div>
+                  <div class="mt-auto">
+                    <button class="btn btn-primary w-100">Agregar al Carrito</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        aiContainer.innerHTML = recommendationsHTML;
+        
+        // Re-initialize AOS for dynamically added elements
+        AOS.refresh();
+      }, 2000);
+    }
+    
+    // Simulate "Load More" button functionality
+    document.getElementById('loadMoreBtn').addEventListener('click', function() {
+      this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...';
+      this.disabled = true;
+      
+      // Simulate loading delay
+      setTimeout(() => {
+        this.innerHTML = 'Cargar Más Productos';
+        this.disabled = false;
+        alert('Este es un prototipo. La funcionalidad de cargar más productos será implementada con la API real.');
+      }, 1500);
+    });
+    
+    // Category filter buttons functionality
+    const filterButtons = document.querySelectorAll('.category-filters .btn');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Show loading spinner
+        document.querySelector('.loading-spinner').style.display = 'block';
+        
+        // Simulate API call to filter products
+        setTimeout(() => {
+          // Hide loading spinner
+          document.querySelector('.loading-spinner').style.display = 'none';
+          
+          // Alert message since this is a prototype
+          if (this.textContent !== 'Todos') {
+            alert(`Este es un prototipo. Los productos filtrados por "${this.textContent}" se cargarán con la API real.`);
+          }
+        }, 800);
+      });
+    });
+    
+    // Run initialization functions when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load reviews and AI recommendations with a slight delay to simulate network requests
+      setTimeout(loadReviews, 500);
+      setTimeout(loadAIRecommendations, 1000);
+    });
+  </script>
+</body>
+</html>

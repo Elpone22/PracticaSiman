@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIMAN - Catálogo de Teléfonos</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts - Montserrat (Sans-serif) for headings and Merriweather (Serif) for body text -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+  
+  <style id="app-style">
+    :root {
+      --siman-red: #e61935;
+      --siman-dark: #222222;
+      --siman-light: #f8f9fa;
+      --siman-gray: #6c757d;
+    }
+    
+    body {
+      font-family: 'Merriweather', serif;
+      background-color: #f8f9fa;
+    }
+    
+    h1, h2, h3, h4, h5, h6, .navbar-brand, .btn {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+    
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-brand {
+      font-size: 1.8rem;
+      color: var(--siman-red);
+    }
+    
+    .hero-section {
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      padding: 80px 0;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--siman-gray);
+    }
+    
+    .product-card {
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 100%;
+      cursor: pointer;
+      background-color: white;
+      border: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .product-img-container {
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background-color: white;
+    }
+    
+    .product-img {
+      max-height: 180px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    
+    .product-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-specs {
+      font-size: 0.9rem;
+      color: var(--siman-gray);
+      margin-bottom: 0.75rem;
+    }
+    
+    .product-price {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--siman-red);
+    }
+    
+    .modal-header {
+      background-color: var(--siman-red);
+      color: white;
+    }
+    
+    .modal-title {
+      font-weight: 700;
+    }
+    
+    .modal-product-img {
+      max-height: 300px;
+      object-fit: contain;
+    }
+    
+    .spec-label {
+      font-weight: 600;
+      color: var(--siman-dark);
+    }
+    
+    .btn-siman {
+      background-color: var(--siman-red);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-weight: 500;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    
+    .btn-siman:hover {
+      background-color: #c5162e;
+      color: white;
+    }
+    
+    .footer {
+      background-color: var(--siman-dark);
+      color: white;
+      padding: 40px 0;
+    }
+    
+    .footer-links h5 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: #adb5bd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .social-icon {
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: white;
+    }
+    
+    .copyright {
+      color: #adb5bd;
+      font-size: 0.9rem;
+    }
+    
+    #loading-spinner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      z-index: 9999;
+    }
+    
+    @media (max-width: 767.98px) {
+      .hero-section {
+        padding: 40px 0;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Spinner -->
+  <div id="loading-spinner" class="d-none">
+    <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="https://siman.vtexassets.com/arquivos/logo-footer.png" alt="Siman" class="siman-logo" style="width: 150px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="belleza.html">Belleza</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="celular.html">Celulares</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="zapatos.html">Zapatos</a>
+          </li>
+        </ul>
+        <div class="ms-3 d-flex">
+          <a href="javascript:void(0)" class="btn btn-outline-dark me-2">
+            <i class="fas fa-search"></i>
+          </a>
+          <a href="javascript:void(0)" class="btn btn-outline-dark">
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="hero-title">Descubre los Últimos Smartphones</h1>
+          <p class="hero-subtitle">Explora nuestra colección de teléfonos de las mejores marcas. Encuentra el dispositivo perfecto que se adapte a tu estilo y necesidades.</p>
+          <a href="javascript:void(0)" class="btn btn-siman mt-3">Ver Ofertas Especiales</a>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block">
+          <img src="https://cdn.pixabay.com/photo/2016/11/29/09/08/iphone-1868632_1280.jpg" alt="Teléfonos en exhibición" class="img-fluid rounded-3">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Catálogo de Teléfonos</h2>
+      
+      <!-- Filters -->
+      <div class="row mb-4">
+        <div class="col-md-6 col-lg-3 mb-3">
+          <select class="form-select">
+            <option selected>Todas las marcas</option>
+            <option>Samsung</option>
+            <option>Apple</option>
+            <option>Xiaomi</option>
+            <option>Huawei</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+          <select class="form-select">
+            <option selected>Rango de precio</option>
+            <option>$0 - $200</option>
+            <option>$200 - $500</option>
+            <option>$500 - $1000</option>
+            <option>$1000+</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+          <select class="form-select">
+            <option selected>Ordenar por</option>
+            <option>Más recientes</option>
+            <option>Precio: Mayor a menor</option>
+            <option>Precio: Menor a mayor</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-3">
+          <div class="d-grid">
+            <button class="btn btn-siman">Aplicar filtros</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Products Grid -->
+      <div class="row g-4" id="products-container">
+        <!-- Product 1 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="1">
+            <div class="product-img-container">
+              <img src="https://cdn.pixabay.com/photo/2020/11/22/11/53/iphone-12-5766344_1280.jpg" alt="iPhone 13" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">iPhone 13</h5>
+              <p class="product-specs">128GB, Pantalla Super Retina XDR, iOS 15</p>
+              <p class="product-price">$799.99</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 2 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="2">
+            <div class="product-img-container">
+              <img src="https://th.bing.com/th/id/R.0e4cceeeb42943f6a5094c26e602f7b6?rik=KlCaF105mlFUrQ&pid=ImgRaw&r=0" alt="Samsung Galaxy S22" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">Samsung Galaxy S22</h5>
+              <p class="product-specs">256GB, Pantalla Dynamic AMOLED, Android 12</p>
+              <p class="product-price">$749.99</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="3">
+            <div class="product-img-container">
+              <img src="https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg" alt="Xiaomi 12" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">Xiaomi 12</h5>
+              <p class="product-specs">128GB, Pantalla AMOLED, MIUI 13</p>
+              <p class="product-price">$599.99</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 4 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="4">
+            <div class="product-img-container">
+              <img src="https://cdn.pixabay.com/photo/2018/01/08/02/34/technology-3068617_1280.jpg" alt="Google Pixel 6" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">Google Pixel 6</h5>
+              <p class="product-specs">256GB, Pantalla OLED, Android 12</p>
+              <p class="product-price">$699.99</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 5 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="5">
+            <div class="product-img-container">
+              <img src="https://th.bing.com/th/id/R.a19f0a45ef85bc4c395c19ccd17062fc?rik=ytI8ANET0GDHMQ&pid=ImgRaw&r=0" alt="Huawei P50 Pro" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">Huawei P50 Pro</h5>
+              <p class="product-specs">256GB, Pantalla OLED, HarmonyOS</p>
+              <p class="product-price">$899.99</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 6 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="6">
+            <div class="product-img-container">
+              <img src="https://pisces.bbystatic.com/image2/BestBuy_US/images/products/6009/6009953_sd.jpg" alt="iPhone 12 Mini" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">iPhone 12 Mini</h5>
+              <p class="product-specs">128GB, Pantalla Super Retina XDR, iOS 15</p>
+              <p class="product-price">$599.99</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 7 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="7">
+            <div class="product-img-container">
+              <img src="https://cdn.pixabay.com/photo/2015/01/20/13/13/samsung-605439_1280.jpg" alt="Samsung Galaxy Z Flip" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">Samsung Galaxy Z Flip</h5>
+              <p class="product-specs">256GB, Pantalla plegable, Android 12</p>
+              <p class="product-price">$999.99</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 8 -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" data-product-id="8">
+            <div class="product-img-container">
+              <img src="https://cdn.pixabay.com/photo/2016/12/09/11/33/smartphone-1894723_1280.jpg" alt="OnePlus 10 Pro" class="product-img">
+            </div>
+            <div class="card-body">
+              <h5 class="product-title">OnePlus 10 Pro</h5>
+              <p class="product-specs">256GB, Pantalla Fluid AMOLED, OxygenOS</p>
+              <p class="product-price">$799.99</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Load More Button -->
+      <div class="text-center mt-5">
+        <button class="btn btn-outline-dark btn-lg px-4" id="load-more-btn">Cargar más productos</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Detalles del Producto</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+              <div id="productImageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="https://cdn.pixabay.com/photo/2020/11/22/11/53/iphone-12-5766344_1280.jpg" class="d-block w-100 modal-product-img" alt="Producto">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="https://cdn.pixabay.com/photo/2016/11/29/05/08/apple-1867461_1280.jpg" class="d-block w-100 modal-product-img" alt="Producto vista lateral">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="https://cdn.pixabay.com/photo/2014/08/05/10/30/iphone-410324_1280.jpg" class="d-block w-100 modal-product-img" alt="Producto vista trasera">
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productImageCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Siguiente</span>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h3 id="modal-product-title">iPhone 13</h3>
+              <p class="product-price" id="modal-product-price">$799.99</p>
+              <div class="mb-4">
+                <div class="d-flex mb-2">
+                  <span class="text-warning me-1"><i class="fas fa-star"></i></span>
+                  <span class="text-warning me-1"><i class="fas fa-star"></i></span>
+                  <span class="text-warning me-1"><i class="fas fa-star"></i></span>
+                  <span class="text-warning me-1"><i class="fas fa-star"></i></span>
+                  <span class="text-warning me-1"><i class="fas fa-star-half-alt"></i></span>
+                  <span class="ms-2">(124 reseñas)</span>
+                </div>
+              </div>
+              <div class="mb-4">
+                <h5>Especificaciones:</h5>
+                <ul class="list-unstyled">
+                  <li class="mb-2"><span class="spec-label">Almacenamiento:</span> 128GB</li>
+                  <li class="mb-2"><span class="spec-label">Pantalla:</span> Super Retina XDR de 6.1 pulgadas</li>
+                  <li class="mb-2"><span class="spec-label">Procesador:</span> A15 Bionic</li>
+                  <li class="mb-2"><span class="spec-label">Cámara:</span> Sistema de doble cámara de 12MP</li>
+                  <li class="mb-2"><span class="spec-label">Batería:</span> Hasta 19 horas de reproducción de video</li>
+                  <li class="mb-2"><span class="spec-label">Sistema Operativo:</span> iOS 15</li>
+                </ul>
+              </div>
+              <div class="mb-4">
+                <h5>Colores disponibles:</h5>
+                <div class="d-flex my-3">
+                  <div class="color-option rounded-circle me-2" style="background-color: #000; width: 25px; height: 25px; cursor: pointer; border: 2px solid #dee2e6;"></div>
+                  <div class="color-option rounded-circle me-2" style="background-color: #fff; width: 25px; height: 25px; cursor: pointer; border: 2px solid #dee2e6;"></div>
+                  <div class="color-option rounded-circle me-2" style="background-color: #00f; width: 25px; height: 25px; cursor: pointer; border: 2px solid #dee2e6;"></div>
+                  <div class="color-option rounded-circle me-2" style="background-color: #f00; width: 25px; height: 25px; cursor: pointer; border: 2px solid #dee2e6;"></div>
+                </div>
+              </div>
+              <div class="d-grid gap-2">
+                <button class="btn btn-siman">Añadir al carrito</button>
+                <button class="btn btn-outline-dark">Comprar ahora</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5>SIMAN</h5>
+          <p class="mb-3">Tu tienda de confianza para todos tus artículos electrónicos y del hogar.</p>
+          <div class="d-flex mb-4">
+            <a href="javascript:void(0)" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="javascript:void(0)" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="javascript:void(0)" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="javascript:void(0)" class="social-icon"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0 footer-links">
+          <h5>Departamentos</h5>
+          <ul>
+            <li><a href="javascript:void(0)">Tecnología</a></li>
+            <li><a href="javascript:void(0)">Electrodomésticos</a></li>
+            <li><a href="javascript:void(0)">Moda</a></li>
+            <li><a href="javascript:void(0)">Hogar</a></li>
+            <li><a href="javascript:void(0)">Juguetes</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0 footer-links">
+          <h5>Servicio al Cliente</h5>
+          <ul>
+            <li><a href="javascript:void(0)">Contacto</a></li>
+            <li><a href="javascript:void(0)">Preguntas Frecuentes</a></li>
+            <li><a href="javascript:void(0)">Términos y Condiciones</a></li>
+            <li><a href="javascript:void(0)">Política de Privacidad</a></li>
+            <li><a href="javascript:void(0)">Devoluciones</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0 footer-links">
+          <h5>Mi Cuenta</h5>
+          <ul>
+            <li><a href="javascript:void(0)">Iniciar Sesión</a></li>
+            <li><a href="javascript:void(0)">Registrarse</a></li>
+            <li><a href="javascript:void(0)">Mis Pedidos</a></li>
+            <li><a href="javascript:void(0)">Mi Lista de Deseos</a></li>
+            <li><a href="javascript:void(0)">Tarjeta de Regalo</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <hr class="mt-4 mb-3" style="border-color: #495057;">
+      
+      <div class="row">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <p class="copyright">© 2025 SIMAN. Todos los derechos reservados.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <img src="https://cdn.pixabay.com/photo/2021/12/06/13/48/visa-6850402_1280.png" alt="Métodos de pago" height="30" class="me-2">
+          <img src="https://cdn.pixabay.com/photo/2015/05/26/09/37/paypal-784404_1280.png" alt="Métodos de pago" height="30" class="me-2">
+          <img src="https://cdn.pixabay.com/photo/2013/10/01/10/29/ebay-189064_1280.png" alt="Métodos de pago" height="30">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script id="app-script">
+    document.addEventListener('DOMContentLoaded', function() {
+      // Show loading spinner when data is being "fetched"
+      function showLoading() {
+        document.getElementById('loading-spinner').classList.remove('d-none');
+      }
+      
+      function hideLoading() {
+        document.getElementById('loading-spinner').classList.add('d-none');
+      }
+      
+      // Simulate loading when page loads
+      showLoading();
+      setTimeout(hideLoading, 1000);
+      
+      // Simulate loading more products
+      const loadMoreBtn = document.getElementById('load-more-btn');
+      loadMoreBtn.addEventListener('click', function() {
+        showLoading();
+        
+        // Simulate fetching data and hide spinner after 1 second
+        setTimeout(function() {
+          hideLoading();
+          alert("Este es un prototipo. Al continuar su desarrollo, se implementarán las APIs para cargar más productos.");
+        }, 1000);
+      });
+      
+      // Product modal functionality
+      const productModal = document.getElementById('productModal');
+      productModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const productId = button.getAttribute('data-product-id');
+        
+        // Here we would normally fetch product details from an API
+        // For this prototype, we'll just update the modal title based on the card that was clicked
+        const productCard = button.closest('.product-card');
+        const productTitle = productCard.querySelector('.product-title').textContent;
+        const productPrice = productCard.querySelector('.product-price').textContent;
+        
+        const modalTitle = document.getElementById('modal-product-title');
+        const modalPrice = document.getElementById('modal-product-price');
+        
+        modalTitle.textContent = productTitle;
+        modalPrice.textContent = productPrice;
+      });
+      
+      // Store last fetch timestamp in localStorage
+      const lastFetchTime = new Date().toISOString();
+      localStorage.setItem('lastPhonesFetch', lastFetchTime);
+    });
+  </script>
+</body>
+</html>
